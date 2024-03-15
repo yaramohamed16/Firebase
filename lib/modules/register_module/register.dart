@@ -1,10 +1,11 @@
 //register
 import 'package:firebase/pages/Home.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../cubit/register_cubit/register_cubit.dart';
 import 'login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../constant.dart';
+import '../constants/constant.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -16,48 +17,81 @@ class RegisterScreen extends StatelessWidget {
     var phoneController = TextEditingController();
     var emailController = TextEditingController();
     var passwordController = TextEditingController();
-
+    var confirmPasswordController = TextEditingController();
     return BlocProvider(
       create: (context) => RegisterCubit(),
       child: BlocConsumer<RegisterCubit, RegisterState>(
         listener: (context, state) {
-          if (state is RegisterCreateSuccessState) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Home(),
-              ),
-            );
+          if (state is RegisterSuccessState) {
+            if (state.loginModel.status!) {
+              print(state.loginModel.message);
+
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => Home()));
+
+              Fluttertoast.showToast(
+                  msg: state.loginModel.message!,
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 5,
+                  backgroundColor: Colors.green,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+            } else {
+              print(state.loginModel.message);
+              Fluttertoast.showToast(
+                  msg: state.loginModel.message!,
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 5,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+            }
           }
         },
         builder: (context, state) {
           return Scaffold(
-            backgroundColor: Colors.grey[200],
+            backgroundColor: Colors.white,
             body: Padding(
-              padding: const EdgeInsets.only(top: 120, right: 20, left: 20),
+              padding: const EdgeInsets.only(top: 100, right: 20, left: 20),
               child: SingleChildScrollView(
                 child: Form(
                   key: formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Register',
-                        style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
+                      Center(
+                        child: Material(
+                          elevation: 6, // Adjust the elevation value as needed
+                          shape: CircleBorder(),
+                          clipBehavior: Clip.antiAlias,
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Colors.transparent,
+                            child: ClipOval(
+                              child: Image.asset(
+                                'assets/2.png',
+                                fit: BoxFit.cover,
+                                width: 100,
+                                height: 100,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                       SizedBox(
-                        height: 50,
+                        height: 40,
                       ),
                       TextFormField(
                         keyboardType: TextInputType.text,
                         controller: nameController,
                         decoration: InputDecoration(
-                          fillColor: Colors.grey[100],
+                          fillColor: Colors.white,
                           filled: true,
-                          border: OutlineInputBorder(),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                           prefixIcon: Icon(Icons.person),
                           labelText: 'Name',
                         ),
@@ -69,15 +103,17 @@ class RegisterScreen extends StatelessWidget {
                         },
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 20,
                       ),
                       TextFormField(
                         keyboardType: TextInputType.phone,
                         controller: phoneController,
                         decoration: InputDecoration(
-                          fillColor: Colors.grey[100],
+                          fillColor: Colors.white,
                           filled: true,
-                          border: OutlineInputBorder(),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                           prefixIcon: Icon(Icons.phone),
                           labelText: 'Phone',
                         ),
@@ -88,15 +124,17 @@ class RegisterScreen extends StatelessWidget {
                         },
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 20,
                       ),
                       TextFormField(
                         keyboardType: TextInputType.emailAddress,
                         controller: emailController,
                         decoration: InputDecoration(
-                          fillColor: Colors.grey[100],
+                          fillColor: Colors.white,
                           filled: true,
-                          border: OutlineInputBorder(),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                           prefixIcon: Icon(Icons.email_outlined),
                           labelText: 'Email',
                         ),
@@ -107,7 +145,7 @@ class RegisterScreen extends StatelessWidget {
                         },
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 20,
                       ),
                       TextFormField(
                         obscureText:
@@ -123,11 +161,13 @@ class RegisterScreen extends StatelessWidget {
                                   .changePasswordVisibility();
                             },
                           ),
-                          fillColor: Colors.grey[100],
+                          fillColor: Colors.white,
                           filled: true,
-                          border: OutlineInputBorder(),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                           prefixIcon: Icon(Icons.lock_outline),
-                          labelText: 'Passward',
+                          labelText: 'Password',
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -136,7 +176,41 @@ class RegisterScreen extends StatelessWidget {
                         },
                       ),
                       SizedBox(
-                        height: 55,
+                        height: 20,
+                      ),
+
+                      TextFormField(
+                        obscureText:
+                        BlocProvider.of<RegisterCubit>(context).isConfirmPassword,
+                        keyboardType: TextInputType.visiblePassword,
+                        controller: confirmPasswordController,
+                        decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                                BlocProvider.of<RegisterCubit>(context).confirmSuffix),
+                            onPressed: () {
+                              BlocProvider.of<RegisterCubit>(context)
+                                  .changeConfirmPasswordVisibility();
+                            },
+                          ),
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          prefixIcon: Icon(Icons.password_outlined),
+                          labelText: 'Confirm Password',
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty ) {
+                            return 'Please Enter Password';
+                          }else if(value!=passwordController.text){
+                            return 'The Confirm Password is not Equal the Password';
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        height: 35,
                       ),
                       state is! RegisterLoadingState
                           ? Container(

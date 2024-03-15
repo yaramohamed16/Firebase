@@ -1,10 +1,6 @@
-//login
 import 'package:firebase/pages/Home.dart';
-
-import '../constant.dart';
-
+import '../constants/constant.dart';
 import '../cubit/login_cubit/login_cubit.dart';
-
 import 'register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,32 +29,43 @@ class LoginScreen extends StatelessWidget {
         },
         builder: (context, state) {
           return Scaffold(
-            backgroundColor: Colors.grey[200],
+            backgroundColor: Colors.white,
             body: Padding(
-              padding: const EdgeInsets.only(top: 150, right: 20, left: 20),
+              padding: const EdgeInsets.only(top: 100, right: 20, left: 20),
               child: SingleChildScrollView(
                 child: Form(
                   key: formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Login',
-                        style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
+                      Center(
+                        child: Material(
+                          elevation: 6, // Adjust the elevation value as needed
+                          shape: CircleBorder(),
+                          clipBehavior: Clip.antiAlias,
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Colors.transparent,
+                            child: ClipOval(
+                              child: Image.asset(
+                                'assets/2.png',
+                                fit: BoxFit.cover,
+                                width: 100,
+                                height: 100,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                      SizedBox(
-                        height: 60,
-                      ),
+                      SizedBox(height: 50),
                       TextFormField(
                         keyboardType: TextInputType.emailAddress,
                         controller: emailController,
                         decoration: InputDecoration(
-                          fillColor: Colors.grey[100],
+                          fillColor: Colors.white,
                           filled: true,
-                          border: OutlineInputBorder(),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
                           prefixIcon: Icon(Icons.email_outlined),
                           labelText: 'Email',
                         ),
@@ -68,18 +75,17 @@ class LoginScreen extends StatelessWidget {
                           }
                         },
                       ),
-                      SizedBox(
-                        height: 30,
-                      ),
+                      SizedBox(height: 20),
                       TextFormField(
                         obscureText:
                             BlocProvider.of<LoginCubit>(context).isPassword,
                         keyboardType: TextInputType.visiblePassword,
                         controller: passwordController,
                         decoration: InputDecoration(
-                          fillColor: Colors.grey[100],
+                          fillColor: Colors.white,
                           filled: true,
-                          border: OutlineInputBorder(),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
                           prefixIcon: Icon(Icons.lock_outline),
                           suffixIcon: IconButton(
                             icon: Icon(
@@ -89,7 +95,7 @@ class LoginScreen extends StatelessWidget {
                                   .changePasswordVisibility();
                             },
                           ),
-                          labelText: 'Passward',
+                          labelText: 'Password',
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -99,7 +105,7 @@ class LoginScreen extends StatelessWidget {
                         },
                       ),
                       SizedBox(
-                        height: 55,
+                        height: 35,
                       ),
                       state is! LoginLoadingState
                           ? Container(
@@ -125,27 +131,25 @@ class LoginScreen extends StatelessWidget {
                               ),
                             )
                           : Center(child: CircularProgressIndicator()),
-                      SizedBox(
-                        height: 20,
-                      ),
+                      SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Don\'t have an account ?'),
+                          Text("Don't have an account ?"),
                           TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => RegisterScreen(),
-                                    ));
-                              },
-                              child: Text(
-                                'REGISTER',
-                                style: TextStyle(
-                                  color: mainColor,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RegisterScreen(),
                                 ),
-                              ))
+                              );
+                            },
+                            child: Text(
+                              'REGISTER',
+                              style: TextStyle(color: mainColor),
+                            ),
+                          ),
                         ],
                       ),
                     ],
