@@ -1,11 +1,11 @@
 //register
-import 'package:firebase/pages/Home.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import '../cubit/register_cubit/register_cubit.dart';
-import 'login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../constants/constant.dart';
+
+import '../home_module/Home.dart';
+import '../../cubit/register_cubit/register_cubit.dart';
+import '../login_module/login.dart';
+import '../../shared/constants/constant.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -22,33 +22,10 @@ class RegisterScreen extends StatelessWidget {
       create: (context) => RegisterCubit(),
       child: BlocConsumer<RegisterCubit, RegisterState>(
         listener: (context, state) {
-          if (state is RegisterSuccessState) {
-            if (state.loginModel.status!) {
-              print(state.loginModel.message);
-
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => Home()));
-
-              Fluttertoast.showToast(
-                  msg: state.loginModel.message!,
-                  toastLength: Toast.LENGTH_LONG,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 5,
-                  backgroundColor: Colors.green,
-                  textColor: Colors.white,
-                  fontSize: 16.0);
-            } else {
-              print(state.loginModel.message);
-              Fluttertoast.showToast(
-                  msg: state.loginModel.message!,
-                  toastLength: Toast.LENGTH_LONG,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 5,
-                  backgroundColor: Colors.red,
-                  textColor: Colors.white,
-                  fontSize: 16.0);
-            }
-          }
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const Home()),
+          );
         },
         builder: (context, state) {
           return Scaffold(
@@ -64,7 +41,7 @@ class RegisterScreen extends StatelessWidget {
                       Center(
                         child: Material(
                           elevation: 6, // Adjust the elevation value as needed
-                          shape: CircleBorder(),
+                          shape: const CircleBorder(),
                           clipBehavior: Clip.antiAlias,
                           child: CircleAvatar(
                             radius: 50,
@@ -80,7 +57,7 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 40,
                       ),
                       TextFormField(
@@ -92,8 +69,10 @@ class RegisterScreen extends StatelessWidget {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          prefixIcon: Icon(Icons.person),
+                          prefixIcon: const Icon(Icons.person),
                           labelText: 'Name',
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 16),
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -102,8 +81,8 @@ class RegisterScreen extends StatelessWidget {
                           return null;
                         },
                       ),
-                      SizedBox(
-                        height: 20,
+                      const SizedBox(
+                        height: 25,
                       ),
                       TextFormField(
                         keyboardType: TextInputType.phone,
@@ -114,17 +93,20 @@ class RegisterScreen extends StatelessWidget {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          prefixIcon: Icon(Icons.phone),
+                          prefixIcon: const Icon(Icons.phone),
                           labelText: 'Phone',
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 16),
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Please Enter Phone';
                           }
+                          return null;
                         },
                       ),
-                      SizedBox(
-                        height: 20,
+                      const SizedBox(
+                        height: 25,
                       ),
                       TextFormField(
                         keyboardType: TextInputType.emailAddress,
@@ -135,17 +117,20 @@ class RegisterScreen extends StatelessWidget {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          prefixIcon: Icon(Icons.email_outlined),
+                          prefixIcon: const Icon(Icons.email_outlined),
                           labelText: 'Email',
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 16),
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Please Enter Email';
                           }
+                          return null;
                         },
                       ),
-                      SizedBox(
-                        height: 20,
+                      const SizedBox(
+                        height: 25,
                       ),
                       TextFormField(
                         obscureText:
@@ -166,28 +151,30 @@ class RegisterScreen extends StatelessWidget {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          prefixIcon: Icon(Icons.lock_outline),
+                          prefixIcon: const Icon(Icons.lock_outline),
                           labelText: 'Password',
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 16),
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Please Enter Password';
                           }
+                          return null;
                         },
                       ),
-                      SizedBox(
-                        height: 20,
+                      const SizedBox(
+                        height: 25,
                       ),
-
                       TextFormField(
-                        obscureText:
-                        BlocProvider.of<RegisterCubit>(context).isConfirmPassword,
+                        obscureText: BlocProvider.of<RegisterCubit>(context)
+                            .isConfirmPassword,
                         keyboardType: TextInputType.visiblePassword,
                         controller: confirmPasswordController,
                         decoration: InputDecoration(
                           suffixIcon: IconButton(
-                            icon: Icon(
-                                BlocProvider.of<RegisterCubit>(context).confirmSuffix),
+                            icon: Icon(BlocProvider.of<RegisterCubit>(context)
+                                .confirmSuffix),
                             onPressed: () {
                               BlocProvider.of<RegisterCubit>(context)
                                   .changeConfirmPasswordVisibility();
@@ -198,18 +185,21 @@ class RegisterScreen extends StatelessWidget {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          prefixIcon: Icon(Icons.password_outlined),
+                          prefixIcon: const Icon(Icons.password_outlined),
                           labelText: 'Confirm Password',
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 16),
                         ),
                         validator: (value) {
-                          if (value!.isEmpty ) {
-                            return 'Please Enter Password';
-                          }else if(value!=passwordController.text){
+                          if (value!.isEmpty) {
+                            return 'Please Enter Confirm Password';
+                          } else if (value != passwordController.text) {
                             return 'The Confirm Password is not Equal the Password';
                           }
+                          return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 35,
                       ),
                       state is! RegisterLoadingState
@@ -231,26 +221,26 @@ class RegisterScreen extends StatelessWidget {
                                     );
                                   }
                                 },
-                                child: Text(
+                                child: const Text(
                                   'REGISTER',
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
                             )
-                          : Center(child: CircularProgressIndicator()),
-                      SizedBox(
+                          : const Center(child: CircularProgressIndicator()),
+                      const SizedBox(
                         height: 20,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Already have an account ?'),
+                          const Text('Already have an account ?'),
                           TextButton(
                               onPressed: () {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => LoginScreen(),
+                                      builder: (context) => const LoginScreen(),
                                     ));
                               },
                               child: Text(

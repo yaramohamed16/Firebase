@@ -1,7 +1,7 @@
-import 'package:firebase/pages/Home.dart';
-import '../constants/constant.dart';
-import '../cubit/login_cubit/login_cubit.dart';
-import 'register.dart';
+import '../home_module/Home.dart';
+import '../../shared/constants/constant.dart';
+import '../../cubit/login_cubit/login_cubit.dart';
+import '../register_module/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,7 +22,7 @@ class LoginScreen extends StatelessWidget {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => Home(),
+                builder: (context) => const Home(),
               ),
             );
           }
@@ -41,7 +41,7 @@ class LoginScreen extends StatelessWidget {
                       Center(
                         child: Material(
                           elevation: 6, // Adjust the elevation value as needed
-                          shape: CircleBorder(),
+                          shape: const CircleBorder(),
                           clipBehavior: Clip.antiAlias,
                           child: CircleAvatar(
                             radius: 50,
@@ -57,7 +57,7 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 50),
+                      const SizedBox(height: 50),
                       TextFormField(
                         keyboardType: TextInputType.emailAddress,
                         controller: emailController,
@@ -65,17 +65,21 @@ class LoginScreen extends StatelessWidget {
                           fillColor: Colors.white,
                           filled: true,
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          prefixIcon: Icon(Icons.email_outlined),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          prefixIcon: const Icon(Icons.email_outlined),
                           labelText: 'Email',
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 16),
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Please Enter Email';
                           }
+                          return null;
                         },
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 25),
                       TextFormField(
                         obscureText:
                             BlocProvider.of<LoginCubit>(context).isPassword,
@@ -86,7 +90,7 @@ class LoginScreen extends StatelessWidget {
                           filled: true,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
-                          prefixIcon: Icon(Icons.lock_outline),
+                          prefixIcon: const Icon(Icons.lock_outline),
                           suffixIcon: IconButton(
                             icon: Icon(
                                 BlocProvider.of<LoginCubit>(context).suffix),
@@ -96,6 +100,8 @@ class LoginScreen extends StatelessWidget {
                             },
                           ),
                           labelText: 'Password',
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 16),
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -104,7 +110,7 @@ class LoginScreen extends StatelessWidget {
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 35,
                       ),
                       state is! LoginLoadingState
@@ -124,24 +130,24 @@ class LoginScreen extends StatelessWidget {
                                     );
                                   }
                                 },
-                                child: Text(
+                                child: const Text(
                                   'LOGIN',
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
                             )
-                          : Center(child: CircularProgressIndicator()),
-                      SizedBox(height: 20),
+                          : const Center(child: CircularProgressIndicator()),
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Don't have an account ?"),
+                          const Text("Don't have an account ?"),
                           TextButton(
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => RegisterScreen(),
+                                  builder: (context) => const RegisterScreen(),
                                 ),
                               );
                             },

@@ -1,20 +1,18 @@
 //register cubit
-import 'package:bloc/bloc.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../models/login.dart';
-import '../../network/end_points.dart';
-import '../../network/remote.dart';
-import '../../models/UserData.dart';
+
+import '../../models/user_model/UserData.dart';
+
 part 'register_state.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
   RegisterCubit() : super(RegisterInitialState());
-static RegisterCubit get(context)=>BlocProvider.of(context);
-  LoginModel? loginModel;
+
+  static RegisterCubit get(context) => BlocProvider.of(context);
 
   void register({
     required String name,
@@ -26,7 +24,6 @@ static RegisterCubit get(context)=>BlocProvider.of(context);
     FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password)
         .then((value) {
-      // emit(RegisterSuccessState(loginModel!));
       create(name: name, phone: phone, email: email, uId: value.user!.uid);
     }).catchError((error) {
       emit(RegisterErrorState(error.toString()));
@@ -57,8 +54,6 @@ static RegisterCubit get(context)=>BlocProvider.of(context);
     });
   }
 
-
-
   IconData suffix = Icons.visibility_off_outlined;
   bool isPassword = true;
 
@@ -67,5 +62,16 @@ static RegisterCubit get(context)=>BlocProvider.of(context);
     suffix =
         isPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined;
     emit(RegisterChangeVisibilityState());
+  }
+
+  bool isConfirmPassword = true;
+  IconData confirmSuffix = Icons.visibility_off_outlined;
+
+  void changeConfirmPasswordVisibility() {
+    isConfirmPassword = !isConfirmPassword;
+    confirmSuffix = isConfirmPassword
+        ? Icons.visibility_off_outlined
+        : Icons.visibility_outlined;
+    emit(RegisterConfirmChangeVisibilityState());
   }
 }
